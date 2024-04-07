@@ -27,8 +27,10 @@ export META_CHECKPOINT_PATH=gs://${MY_BUCKET_NAME}/llama-2-7b
 
 # In the following command, we are copying Meta's checkpoint into a local directory `tmp`. 
 # You can use a different local directory than /tmp/, if you do so, please use the same local path for `base-model-path` when running `python3 MaxText/llama_or_mistral_ckpt.py`
-mkdir /tmp/meta-ckpt/
-gcloud storage cp -r ${META_CHECKPOINT_PATH}/* /tmp/meta-ckpt/
+if [ ! -d /tmp/meta-ckpt/ ]; then
+  mkdir /tmp/meta-ckpt/
+  gcloud storage cp -r ${META_CHECKPOINT_PATH}/* /tmp/meta-ckpt/
+fi
 
 # `CONVERTED_CHECKPOINT_PATH` is the path to the GCS bucket where we want to save our converted (Orbax) checkpoint. Non-Googlers please remember to point `CONVERTED_CHECKPOINT_PATH` to a GCS bucket that you own
 export CONVERTED_CHECKPOINT_PATH=gs://${MY_BUCKET_NAME}/test/${idx}/decode-ckpt-maxtext
